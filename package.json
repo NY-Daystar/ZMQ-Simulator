@@ -1,0 +1,30 @@
+{
+	"name": "zmq-simulator",
+	"version": "1.0.0",
+	"description": "",
+	"main": "main.js",
+	"scripts": {
+		"start": "node .",
+		"send": "node . --index 1 --frequency 1 --error 0",
+		"send:simple": "node . --index 1 --message simple --error 0",
+		"send:gpu": "node . --index 1 --message gpu --error 0",
+		"send:stats": "node . --message stats --error 0",
+		"send:stats-total": "node . --message stats-total",
+		"check": "npx eslint ."
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"colors": "^1.0.0",
+		"minimist": "^1.0.0",
+		"moment": "^2.0.0",
+		"zeromq": "^6.0.0"
+	},
+	"devDependencies": {
+		"@eslint/eslintrc": "^3.3.1",
+		"@eslint/js": "^9.34.0",
+		"eslint": "^9.34.0",
+		"globals": "^16.3.0",
+		"prettier": "^3.6.2"
+	}
+}
