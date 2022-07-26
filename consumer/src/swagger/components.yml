@@ -1,0 +1,59 @@
+components:
+    schemas:
+        ZmqClient:
+            type: object
+            properties:
+                port:
+                    type: number
+                messages:
+                    type: array
+                    format: number
+            example:
+                port: 53425
+                messages: ['m1', 'm2', 'm3']
+
+        Error:
+            type: object
+            properties:
+                code:
+                    type: number
+                message:
+                    type: string
+
+    responses:
+        DuplicateEmail:
+            description: Email already taken
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/Error'
+                    example:
+                        code: 400
+                        message: Email already taken
+        Unauthorized:
+            description: Unauthorized
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/Error'
+                    example:
+                        code: 401
+                        message: Please authenticate
+        Forbidden:
+            description: Forbidden
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/Error'
+                    example:
+                        code: 403
+                        message: Forbidden
+        NotFound:
+            description: Not found
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/Error'
+                    example:
+                        code: 404
+                        message: Not found

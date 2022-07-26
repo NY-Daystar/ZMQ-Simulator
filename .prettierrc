@@ -1,0 +1,10 @@
+{
+	"useTabs": true,
+	"endOfLine": "crlf",
+	"printWidth": 125,
+	"proseWrap": "always",
+	"tabWidth": 4,
+	"trailingComma": "all",
+	"semi": true,
+	"singleQuote": true
+}

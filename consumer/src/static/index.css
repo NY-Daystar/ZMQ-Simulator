@@ -1,0 +1,95 @@
+:root {
+	--width: 750px;
+	--height: 30em;
+	--slider-width: 16px;
+	--state-opened-color: #22ae22;
+	--title-color: #9781f9;
+	--state-closed-color: #d95f5f;
+	--console-background-color: #96a116;
+	--button-background-color: blue;
+}
+
+.container {
+	position: relative;
+	width: var(--width);
+	height: var(--height);
+	margin: 1em auto;
+	font-size: 1.2em;
+}
+
+.title {
+	position: relative;
+	margin: 1em auto;
+	width: calc(100% - 250px);
+	color: var(--title-color);
+}
+
+#form-data {
+	height: 100px;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	column-gap: 5em;
+	border-radius: 15%;
+	margin: 1em auto;
+}
+
+.arg {
+	border-radius: 20%;
+	padding: 10px;
+	text-align: center;
+}
+
+.red {
+	color: white;
+	background-color: red;
+}
+.blue {
+	color: white;
+	background-color: blue;
+}
+.green {
+	color: white;
+	background-color: green;
+}
+
+#reload {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: var(--width);
+	margin: 1em auto;
+	font-size: 1.2em;
+}
+
+#reload a {
+	color: white;
+	text-decoration: none;
+}
+
+#messages {
+	background-color: var(--console-background-color);
+	height: 300px;
+	width: 120%;
+	bottom: 0;
+	left: 0;
+	overflow-y: scroll;
+}
+
+#project-version {
+	position: absolute;
+	top: 15px;
+	right: 15px;
+}
+
+button {
+	padding: 5px 10px;
+	cursor: pointer;
+	font-size: 16px;
+	border: none;
+	background-color: var(--button-background-color);
+	color: white;
+	border-radius: 5px;
+}
+
