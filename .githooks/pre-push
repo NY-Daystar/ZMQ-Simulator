@@ -1,0 +1,171 @@
+#!/bin/bash
+
+function main() {
+    ## Handle debug mode
+    if [ "$1" = "--debug" ]; then
+        DEBUG=true
+        log_verbose "Debug mode"
+    fi
+
+    ## Handle detailed mode
+    if [ "$1" = "--detailed" ] || [ "$2" = "--detailed" ]; then
+        DETAILED=true
+        DEBUG=true
+        log_verbose "Detailed mode" "yellow"
+    fi
+
+    log_color "Executing unit tests..." "green"
+    unittest
+    check 'unittest' $?
+    log_color "Executing tests DONE..." "green"
+    
+    log_color "Executing prettier:fix" "magenta"
+    prettier_fix
+    check 'linter' $?
+    log_color "Executing prettier_fix DONE..." "magenta"
+
+    log_color "Executing linter" "magenta"
+    linter
+    check 'linter' $?
+    log_color "Executing linter DONE..." "magenta"
+    
+    log_color "Executing coverage tests" "yellow"
+    coverage
+    log_color "Executing coverage tests DONE..." "yellow"
+
+    log_color "Executing check sca" "magenta"
+    check_sca
+    check 'check_sca' $?
+    log_color "Executing check_sca DONE..." "magenta"
+
+    log_color "Executing sca" "magenta"
+    sca
+    log_color "Executing sca DONE..." "magenta"
+
+    log_color "Every controls are checked" "blue"
+}
+
+###
+# Check return code of compiling, unit tests and tests coverage
+# $1: action to verify
+# $2: return code of the action (0 = action well executed, otherwise bad execution)
+###
+function check() {
+    action=$1
+    result_code=$2
+    log_verbose "action ${action} -> result_code: ${result_code}"
+    case $action in
+    'compile')
+        [ $result_code != 0 ] && log_color "Unable to compile project.\nCancel git push." "red" && exit 1
+        ;;
+
+    'unittest')
+        [ $result_code != 0 ] && log_color "Unit tests are not successful.\nCancel git push." "red" && exit 1
+        ;;
+    'linter')
+        [ $result_code != 0 ] && log_color "Linter check is not successful.\nCancel git push." "red" && exit 1
+        ;;
+    'check_sca')
+        [ $result_code != 0 ] && log_color "No package to launch analysis" "red" && log Execute: $(log_color  "npm i -g npm-audit-html@beta" "yellow") && log_color "Cancel git push" "red" && exit 1
+        ;;
+    esac
+}
+
+function unittest() {
+    npm run test
+    return $?
+}
+
+function coverage() {
+    npm run test:coverage
+    start ./coverage/lcov-report/index.html
+}
+
+function prettier_fix() {
+    npm run prettier:fix
+    return $?
+}
+
+function linter() {
+    npm run lint
+    return $?
+}
+
+function check_sca(){
+    which npm-audit-html > /dev/null 2>/dev/null
+    return $?
+}
+
+function sca() {
+    packages=$(find . -name 'node_modules' -prune -o -name 'package.json' -print)
+
+    root_folder=$(pwd)
+    for package in ${packages[@]}; do
+        parent_folder="$(dirname "$package")"
+        cd $parent_folder
+        npm audit --json | npm-audit-html
+        start ./npm-audit.html
+        cd ${root_folder}      
+    done
+}
+
+################################################################### Utils functions ###################################################################
+
+###
+# Display datetime (ex: 2022-01-10 23:20:35)
+###
+function get_datetime {
+    log $(date '+%Y-%m-%d %H:%M:%S')
+}
+
+################################################################### Logging functions ###################################################################
+
+###
+# Print function
+###
+function log {
+    echo -e $@
+}
+
+###
+# Print color function
+###
+function log_color {
+    message=$1
+    color=$2
+    log ${COLORS[$color]}$message${COLORS[nc]}
+}
+
+typeset -A COLORS=(
+    [default]='\033[0;39m'
+    [black]='\033[0;30m'
+    [red]='\033[0;31m'
+    [green]='\033[0;32m'
+    [yellow]='\033[0;33m'
+    [blue]='\033[0;34m'
+    [magenta]='\033[0;35m'
+    [cyan]='\033[0;36m'
+    [light_gray]='\033[0;37m'
+    [light_grey]='\033[0;37m'
+    [dark_gray]='\033[0;90m'
+    [dark_grey]='\033[0;90m'
+    [light_red]='\033[0;91m'
+    [light_green]='\033[0;92m'
+    [light_yellow]='\033[0;93m'
+    [light_blue]='\033[0;94m'
+    [light_magenta]='\033[0;95m'
+    [light_cyan]='\033[0;96m'
+    [nc]='\033[0m' # No Color
+)
+
+###
+# Print in debug mode
+###
+function log_verbose {
+    message=$@
+    date=$(get_datetime)
+    if [ "${DEBUG}" = "true" ]; then log_color "[$date] $message" "light_blue"; fi
+    return
+}
+
+main "$@"

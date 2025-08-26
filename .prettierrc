@@ -1,7 +1,7 @@
 {
 	"useTabs": true,
-	"endOfLine": "lf",
-	"printWidth": 80,
+	"endOfLine": "crlf",
+	"printWidth": 125,
 	"proseWrap": "always",
 	"tabWidth": 4,
 	"trailingComma": "all",

@@ -1,0 +1,53 @@
+<!doctype html>
+
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>ZMQ Simulator GUI</title>
+		<link rel="stylesheet" href="./index.css" />
+	</head>
+
+	<body>
+		<div class="container">
+			<div class="title">
+				<h1>ZMQ Simulator GUI</h1>
+			</div>
+			<div>
+				<p>This is your setup for the application, you can change it in .env file</p>
+				<a href="/v1/docs">Link to swagger</a>
+			</div>
+			<div id="form-data">
+				<div class="arg blue">
+					<strong>Application port</strong> <br />
+					<%= config.app_port %>
+				</div>
+				<div class="arg red">
+					<strong>ZMQ port</strong> <br />
+					<%= config.zmq_port %>
+				</div>
+				<div class="arg green">
+					<strong>Channel</strong> <br />
+                    <%= config.zmq_channel %>
+                    
+				</div>
+			</div>
+			<div id="reload">
+				<button><a href=".">Reload</a></button>
+			</div>
+
+			<div id="messages">
+                <ul>
+					<% messages.forEach(function(message, i){ %>
+                    <li><%= message.guid %> - <%= message.type %> - <%= message.data %> - received at <%= message.timeSent %> </li> %>
+                    <% }); %>
+                </ul>
+            </div>
+		</div>
+		<!-- TODO afficher le port et le channel zmq  -->
+		<!-- Indique se rendre dans le fichier .env pouur changer -->
+
+		<div id="project-version">Version: <%= config.app_version %></div>
+	</body>
+</html>
+
