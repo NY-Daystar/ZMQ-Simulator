@@ -1,14 +1,14 @@
-const express = require('express');
-const { ZMQController } = require('../../controllers');
-const config = require('../../config');
+import express, { Router } from 'express';
+import { ZMQController } from '../../controllers';
+import config from '../../config';
 
-const router = express.Router();
+const router: Router = express.Router();
 
-const controller = new ZMQController(config.zmq_host, config.zmq_port, config.zmq_channel);
+const controller: ZMQController = new ZMQController(config.zmq_host, config.zmq_port, config.zmq_channel);
 
 router.route('/').get(controller.getZmqMessages);
 
-module.exports = router;
+export default router;
 
 /**
  * @swagger

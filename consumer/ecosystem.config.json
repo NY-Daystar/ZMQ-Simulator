@@ -1,8 +1,8 @@
 {
 	"apps": [
 		{
-			"name": "zmq-consumer",
-			"script": "consumer/src/index.js",
+			"name": "consumer",
+			"script": "consumer/dist/index.js",
 			"instances": 1,
 			"autorestart": true,
 			"watch": false,

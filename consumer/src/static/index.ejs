@@ -29,7 +29,6 @@
 				<div class="arg green">
 					<strong>Channel</strong> <br />
                     <%= config.zmq_channel %>
-                    <!-- TODO Faire un fetch async sur /zmq pour refresh -->
 				</div>
 			</div>
 			<div id="reload">
@@ -42,13 +41,11 @@
 			<div id="messages">
                 <ul>
 					<% messages.forEach(function(message, i){ %>
-                    <li><%= message.guid %> - <%= message.type %> - <%= message.data %> - received at <%= message.timeSent %> </li> %>
+                    <li><%= message.Guid %> - <%= message.Type %> - <%= message.Data %> - received at <%= message.TimeSent %> </li> %>
                     <% }); %>
                 </ul>
             </div>
 		</div>
-		<!-- TODO afficher le port et le channel zmq  -->
-		<!-- Indique se rendre dans le fichier .env pouur changer -->
 
 		<div id="project-version">Version: <%= config.app_version %></div>
 	</body>

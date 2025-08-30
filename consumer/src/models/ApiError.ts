@@ -1,5 +1,8 @@
 class ApiError extends Error {
-	constructor(statusCode, message, isOperational = true, stack = '') {
+	statusCode: number;
+	isOperational: boolean;
+
+	constructor(statusCode: number, message: string, isOperational = true, stack = '') {
 		super(message);
 		this.statusCode = statusCode;
 		this.isOperational = isOperational;
@@ -9,9 +12,9 @@ class ApiError extends Error {
 			Error.captureStackTrace(this, this.constructor);
 		}
 	}
-	toString = () => {
+	toString = (): string => {
 		return `Code: ${this.statusCode} - Message: ${this.message}`;
 	};
 }
 
-module.exports = ApiError;
+export default ApiError;

@@ -1,19 +1,26 @@
-const zmq = require('zeromq');
-const moment = require('moment');
-const config = require('../config');
+import { Subscriber } from 'zeromq';
+import moment from 'moment';
+import config from '../config';
+import ZMQData from './ZMQData';
 
 class ZMQClient {
-	constructor(host, port) {
+	host: string;
+	port: number;
+	messages: ZMQData[];
+	sock: Subscriber | null;
+	doNotify: boolean;
+	index: number;
+	constructor(host: string, port: number) {
 		this.host = host;
 		this.port = port;
-		this.messages = [];
+		this.messages = [] as ZMQData[];
 		this.sock = null;
 		this.doNotify = false;
 		this.index = 0;
 	}
 
-	async subscribe(channel) {
-		this.sock = new zmq.Subscriber();
+	async subscribe(channel: string) {
+		this.sock = new Subscriber();
 		this.sock.connect(`tcp://${this.host}:${this.port}`);
 		if (channel === null) {
 			this.sock.subscribe();
@@ -29,13 +36,15 @@ class ZMQClient {
 			} else {
 				msg = msg1;
 			}
-			const data = JSON.parse(msg);
-			this.messages.push({
-				guid: data.guid,
-				type: data.type,
-				data: JSON.stringify(data.data),
-				timeSent: moment.unix(data.timeSent).format('LLLL'),
-			});
+
+			const rawData = JSON.parse(msg.toString());
+			const data: ZMQData = {} as ZMQData;
+			data.Guid = rawData.Guid;
+			data.Type = rawData.Type;
+			data.Data = JSON.stringify(rawData.Data);
+			data.TimeSent = moment.unix(rawData.TimeSent).format('LLLL');
+
+			this.messages.push(data);
 			this.doNotify = true;
 		}
 	}
@@ -52,7 +61,7 @@ class ZMQClient {
 		}
 
 		if (config.env === 'development') {
-			console.info(`new zmq message [GUID] : ${this.messages[this.messages.length - 1].guid}`);
+			console.info(`new zmq message [GUID] : ${this.messages[this.messages.length - 1].Guid}`);
 		}
 		this.index++;
 		this.doNotify = false;
@@ -62,9 +71,10 @@ class ZMQClient {
 	 * Close socket connexion
 	 */
 	unsubscribe() {
+		if (!this.sock) return;
 		this.sock.close();
 		this.sock = null;
 	}
 }
 
-module.exports = ZMQClient;
+export default ZMQClient;

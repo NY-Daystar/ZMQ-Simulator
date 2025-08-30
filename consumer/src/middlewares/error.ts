@@ -1,19 +1,20 @@
-const httpStatus = require('http-status');
-const config = require('../config');
-const ApiError = require('../utils/ApiError');
+import { Request, Response, NextFunction } from 'express';
+import httpStatus from 'http-status';
+import config from '../config';
+import ApiError from '../models/ApiError';
 
-const errorConverter = (err, _, __, next) => {
+const errorConverter = (err: Error, _: Request, __: Response, next: NextFunction) => {
 	if (!(err instanceof ApiError)) {
-		err = new ApiError(httpStatus.default.INTERNAL_SERVER_ERROR, null, false, err.stack);
+		err = new ApiError(httpStatus.INTERNAL_SERVER_ERROR, err.message, false, err.stack);
 	}
 	next(err);
 };
 
 // eslint-disable-next-line no-unused-vars
-const errorHandler = (err, _, res, __) => {
+const errorHandler = (err: ApiError, _: Request, res: Response, __: NextFunction) => {
 	let { statusCode, message } = err;
 	if (config.env === 'production' && !err.isOperational) {
-		statusCode = httpStatus.default.INTERNAL_SERVER_ERROR;
+		statusCode = httpStatus.INTERNAL_SERVER_ERROR;
 		message = 'Internal error';
 	}
 
@@ -33,7 +34,4 @@ const errorHandler = (err, _, res, __) => {
 	res.status(statusCode).send(response);
 };
 
-module.exports = {
-	errorConverter,
-	errorHandler,
-};
+export { errorConverter, errorHandler };

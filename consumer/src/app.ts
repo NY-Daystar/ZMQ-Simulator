@@ -1,16 +1,17 @@
-const express = require('express');
-const helmet = require('helmet');
-const cors = require('cors');
-const path = require('path');
-const favicon = require('serve-favicon');
-const httpStatus = require('http-status');
-const routes = require('./routes/v1');
-const { errorConverter, errorHandler } = require('./middlewares/error');
-const { log, ApiError } = require('./utils');
-const config = require('./config');
-const { ZMQService } = require('./services');
+import express, { Express, Request, Response, NextFunction } from 'express';
+import helmet from 'helmet';
+import cors from 'cors';
+import path from 'path';
+import favicon from 'serve-favicon';
+import httpStatus from 'http-status';
+import routes from './routes/v1';
+import { errorConverter, errorHandler } from './middlewares/error';
+import { log } from './utils';
+import config from './config';
+import { ZMQService } from './services';
+import ApiError from './models/ApiError';
 
-const app = express();
+const app: Express = express();
 
 // set security HTTP headers
 app.use(helmet());
@@ -29,11 +30,11 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'static'));
 
 // Launch services
-const zmqService = ZMQService.getService(config.zmq_port, config.zmq_channel);
+const zmqService: ZMQService = ZMQService.getService(config.zmq_host, config.zmq_port, config.zmq_channel);
 
 // Show every route called
 if (config.env === 'development') {
-	app.use((req, res, next) => {
+	app.use((req: Request, res: Response, next: NextFunction) => {
 		log(`${res.statusCode} - ${req.url}`);
 		next();
 	});
@@ -56,7 +57,7 @@ app.use('/', (_, res) => {
 
 // send back a 404 error for any unknown api request
 app.use((_, res, next) => {
-	if (res.status(404)) next(new ApiError(httpStatus.default.NOT_FOUND, 'Not found'));
+	if (res.status(404)) next(new ApiError(httpStatus.NOT_FOUND, 'Not found'));
 });
 
 // convert error to ApiError, if needed
@@ -65,4 +66,4 @@ app.use(errorConverter);
 // handle error
 app.use(errorHandler);
 
-module.exports = app;
+export default app;

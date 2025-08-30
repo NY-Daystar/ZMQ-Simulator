@@ -7,13 +7,23 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ### Project releases
 
-## 1.1.0 - August, XXst 2025 - Upgrade
+## 1.2.0 - September, XXst 2025 - Migrate to typescript
 
 #### Added
 
+- Typescript documentation in Readme
+
+#### Changed
+
+- Migrate to typescript
+
+## 1.1.0 - August, 31st 2025 - Dockerization
+
+#### Added
+
+- add docker build and docker-compose
 - update readme documentation
 - add swagger
-- add docker build and docker-compose
 
 #### Changed
 

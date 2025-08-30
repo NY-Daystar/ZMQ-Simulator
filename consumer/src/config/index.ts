@@ -1,0 +1,35 @@
+import dotenv from 'dotenv';
+import path from 'path';
+import Joi, { ObjectSchema } from 'joi';
+import { version } from '../../../package.json';
+dotenv.config({ path: path.join(__dirname, '../../../.env'), override: true });
+
+const createConfiguration = () => {
+	const schema = Joi.object()
+		.keys({
+			NODE_ENV: Joi.string().valid('production', 'development', 'test').required(),
+			APP_PORT: Joi.number().default(3000),
+			ZMQ_HOST: Joi.string().default('localhost'),
+			ZMQ_PORT: Joi.number().default(49152),
+			ZMQ_CHANNEL: Joi.string(),
+		})
+		.unknown();
+	return schema;
+};
+
+const envVarsSchema: ObjectSchema = createConfiguration();
+
+const { value: envVars, error } = envVarsSchema.prefs({ errors: { label: 'key' } }).validate(process.env);
+
+if (error) {
+	throw new Error(`Configuration Consumer validation error: ${error.message}`);
+}
+
+export default {
+	app_version: version,
+	env: envVars.NODE_ENV,
+	app_port: envVars.APP_PORT,
+	zmq_host: envVars.ZMQ_HOST,
+	zmq_port: envVars.ZMQ_PORT,
+	zmq_channel: envVars.ZMQ_CHANNEL,
+};

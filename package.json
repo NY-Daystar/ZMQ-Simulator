@@ -1,6 +1,6 @@
 {
 	"name": "zmq-simulator",
-	"version": "1.1.0",
+	"version": "1.2.0",
 	"description": "Node js application to publish message with ZeroMQ protocol",
 	"repository": "https://github.com/NY-Daystar/ZMQ-Simulator",
 	"author": "Lucas Noga <luc4snoga@gmail.com>",
@@ -8,19 +8,20 @@
 	"engines": {
 		"node": ">=24.0.0"
 	},
-	"main": "publisher/src/index.js",
+	"main": "publisher/src/index.ts",
 	"scripts": {
+		"build:publisher": "tsc --project publisher/",
+		"build:consumer": "tsc --project consumer/ && cpx consumer/src/static/**/* consumer/dist/static",
 		"start:publisher": "pm2 start publisher/ecosystem.config.json --no-daemon",
 		"start:consumer": "pm2 start consumer/ecosystem.config.json --no-daemon",
-		"dev": "npm run dev:publisher && npm run dev:consumer",
-		"dev:publisher": "cross-env NODE_ENV=development nodemon publisher/src/index.js",
-		"dev:consumer": "cross-env NODE_ENV=development nodemon consumer/src/index.js",
-		"test": "jest",
+		"dev:publisher": "cross-env NODE_ENV=development nodemon --watch publisher/src --exec ts-node publisher/src/index.ts",
+		"dev:consumer": "cross-env NODE_ENV=development nodemon --watch consumer/src --exec ts-node consumer/src/index.ts",
+		"test": "jest --verbose",
 		"test:coverage": "jest --coverage",
 		"lint": "eslint .",
 		"lint:fix": "eslint . --fix",
-		"prettier": "prettier --check **/*.js",
-		"prettier:fix": "prettier --write **/*.js",
+		"prettier": "prettier --check **/*.ts",
+		"prettier:fix": "prettier --write **/*.ts",
 		"docker:build": "docker-compose build",
 		"docker": "docker-compose -p zmq-simulator up"
 	},
@@ -44,10 +45,28 @@
 	"devDependencies": {
 		"@eslint/eslintrc": "^3.3.1",
 		"@eslint/js": "^9.34.0",
+		"@types/cors": "^2.8.19",
+		"@types/express": "^5.0.3",
+		"@types/jest": "^30.0.0",
+		"@types/joi": "^17.2.2",
+		"@types/node": "^24.3.0",
+		"@types/serve-favicon": "^2.5.7",
+		"@types/swagger-jsdoc": "^6.0.4",
+		"@types/swagger-ui-express": "^4.1.8",
+		"@types/zeromq": "^5.2.5",
+		"@typescript-eslint/eslint-plugin": "^8.41.0",
+		"@typescript-eslint/parser": "^8.41.0",
+		"cpx": "^1.5.0",
 		"cross-env": "^10.0.0",
 		"eslint": "^9.34.0",
-		"jest": "^30.0.5",
+		"eslint-config-prettier": "^10.1.8",
+		"eslint-plugin-ejs": "^0.0.2",
+		"eslint-plugin-prettier": "^5.5.4",
+		"jest": "^30.1.1",
 		"nodemon": "^3.1.10",
-		"prettier": "^3.6.2"
+		"prettier": "^3.6.2",
+		"ts-jest": "^29.4.1",
+		"ts-node": "^10.9.2",
+		"typescript": "^5.9.2"
 	}
 }
