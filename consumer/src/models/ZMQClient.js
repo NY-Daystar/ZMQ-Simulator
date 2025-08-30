@@ -3,7 +3,8 @@ const moment = require('moment');
 const config = require('../config');
 
 class ZMQClient {
-	constructor(port) {
+	constructor(host, port) {
+		this.host = host;
 		this.port = port;
 		this.messages = [];
 		this.sock = null;
@@ -13,13 +14,13 @@ class ZMQClient {
 
 	async subscribe(channel) {
 		this.sock = new zmq.Subscriber();
-		this.sock.connect(`tcp://127.0.0.1:${this.port}`);
+		this.sock.connect(`tcp://${this.host}:${this.port}`);
 		if (channel === null) {
 			this.sock.subscribe();
 		} else {
 			this.sock.subscribe(channel);
 		}
-		console.info(`Subscriber connected to port ${this.port} and the channel ${channel}`);
+		console.info(`Subscriber connected to host ${this.host} and port ${this.port} channel: ${channel}`);
 
 		for await (const [msg1, msg2] of this.sock) {
 			let msg = null;
@@ -37,14 +38,6 @@ class ZMQClient {
 			});
 			this.doNotify = true;
 		}
-	}
-
-	openConnection() {
-		if (this.sock == null) {
-			this.sock = new zmq.Subscriber();
-		}
-		this.sock.connect(`tcp://127.0.0.1:${this.port}`);
-		return;
 	}
 
 	/**

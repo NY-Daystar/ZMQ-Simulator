@@ -1,12 +1,13 @@
-const Client = require('../../src/models/ZMQClient');
+const ZmqClient = require('../../src/models/ZMQClient');
 const { Subscriber } = require('zeromq');
 
+const TEST_HOST = 'localhost';
 const TEST_PORT = 49152;
 const TEST_CHANNEL = 'default-channel';
 
 let client = null;
 beforeAll(() => {
-	client = new Client(TEST_PORT);
+	client = new ZmqClient(TEST_HOST, TEST_PORT);
 	client.subscribe(TEST_CHANNEL);
 });
 afterAll(() => {

@@ -8,6 +8,7 @@ const envVarsSchema = Joi.object()
 	.keys({
 		NODE_ENV: Joi.string().valid('production', 'development', 'test').required(),
 		APP_PORT: Joi.number().default(3000),
+		ZMQ_HOST: Joi.string().default('localhost'),
 		ZMQ_PORT: Joi.number().default(49152),
 		ZMQ_CHANNEL: Joi.string(),
 	})
@@ -23,6 +24,7 @@ module.exports = {
 	app_version: version,
 	env: envVars.NODE_ENV,
 	app_port: envVars.APP_PORT,
+	zmq_host: envVars.ZMQ_HOST,
 	zmq_port: envVars.ZMQ_PORT,
 	zmq_channel: envVars.ZMQ_CHANNEL,
 };

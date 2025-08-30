@@ -7,13 +7,13 @@ const swaggerDef = {
 		title: 'ZMQ simulator',
 		version,
 		license: {
-			name: 'GPL3.0',
+			name: 'GPL 3.0',
 			url: 'https://github.com/NY-Daystar/ZMQ-Simulator',
 		},
 	},
 	servers: [
 		{
-			url: `http://localhost:${config.port}/v1`,
+			url: `http://localhost:${config.app_port}/v1`,
 		},
 	],
 };

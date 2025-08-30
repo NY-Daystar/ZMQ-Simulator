@@ -1,8 +1,8 @@
 # ZMQ-simulator
 
-**_Version: v1.0.0_**
+**_Version: v1.1.0_**
 
-[![ci](https://github.com/NY-Daystar/zmq-simulator/actions/workflows/go.yml/badge.svg?branch=master)](https://github.com/NY-Daystar/zmq-simulator/actions)
+[![ci](https://github.com/NY-Daystar/zmq-simulator/actions/workflows/js.yml/badge.svg?branch=main)](https://github.com/NY-Daystar/zmq-simulator/actions)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Version](https://img.shields.io/github/tag/Ny-daystar/zmq-simulator.svg)](https://github.com/NY-Daystar/zmq-simulator/releases)
 [![Total views](https://img.shields.io/sourcegraph/rrc/github.com/NY-Daystar/zmq-simulator.svg)](https://sourcegraph.com/github.com/NY-Daystar/zmq-simulator)
@@ -26,10 +26,11 @@ You can send it in specific queues for any javascript application.
 Useful in interapplication in the same host  
 To know about [ZeroMQ](https://zeromq.org/)
 
-TODO screen log simulateur + gui
+Graphic interface to see data from ZMQ  
+![Graphic user interface](./docs/GUI.png)
 
-<!-- ![Graphic user interface](./docs/graphicmode.png)
-![Settings](./docs/settings.png) -->
+Here's the simulator which send messages  
+![Simulator](./docs/Publisher.png)
 
 Source code analysed with [DeepSource](https://deepsource.com/)
 
@@ -37,10 +38,8 @@ Source code analysed with [DeepSource](https://deepsource.com/)
 
 - [Prerequisites](#prerequisites)
 - [Get started](#get-started)
-- [Launch simulator](#launch-simulator)
 - [Commands list](#commands-list)
 - [VS Code](#vs-code)
-- [Suggestions](#suggestions)
 - [Credits](#credits)
 
 ## Prérequis
@@ -76,41 +75,40 @@ cp .env.example .env
 # open .env and modify the environment variables (if needed)
 ```
 
-TODO expliquer le fichier
-
-5. Launch application  
-   TODO with docker
-
-```
-npm start
-```
-
-## Launch simulator
-
-The simulator will produce message with zmq protocol The GUI will consume this message
+This file look like this, you can change any values
 
 ```bash
-npm start
+APP_PORT=3000                   # port to get access to application gui in browswer (http://localhost:3000)
+ZMQ_HOST=localhost             # host for zmq to send and receive messages (default: localhost)
+ZMQ_PORT=49152                  # port for zmq to send and receive messages (default: 49152)
+ZMQ_CHANNEL=zmq-channel         # name of the channel to send and receive message (default: zmq-channel)
+FREQUENCY=1                     # seconds between message (default: 1second)
+PUBLISHER_ALSO_CONSUME=false    # if you want the publisher program also receive the message itself (default: false)
 ```
 
-##### Execute linter
+5. Launch application in first terminal
 
 ```bash
-npm run check
+npm run start:publisher
 ```
 
-TODO A DETAILLER
+in second terminal
 
-```js
-		"test:coverage": "jest --coverage",
-		"test:coverageall": "jest -i --coverage --coverageReporters=text-lcov | coveralls",
-		"lint": "eslint .",
-		"lint:fix": "eslint . --fix",
-		"prettier": "prettier --check **/*.js",
-		"prettier:fix": "prettier --write **/*.js"
+```bash
+npm run start:consumer
 ```
 
-### Execute unit tests
+6. Or Launch application with docker
+
+```bash
+npm run docker
+```
+
+TODO expliquer le fichier de data
+
+## Commands list
+
+### Launch unit tests
 
 Unit tests executed with jest
 
@@ -118,19 +116,22 @@ Unit tests executed with jest
 npm run test
 ```
 
-## VS Code
-
-Si vous utiliser VS Code, vous pouvez ajouter vos settings dans le path `.vscode/settings.json`.
-
-Vous avez besoin d'installer ces plugins également
-
-- `prettier`: Formatteur de code source [prettier](https://prettier.io/)
-- `eslint`: Validateur de code source [eslint](https://eslint.org/)
-
-Pour vérifier avec eslint
+### Launch unit tests coverage
 
 ```bash
-$ npm run check
+npm run test:coverage
+```
+
+### Execute linter to check
+
+```bash
+npm run lint
+```
+
+### Execute prettier
+
+```bash
+npm run prettier
 ```
 
 ## Suggestions

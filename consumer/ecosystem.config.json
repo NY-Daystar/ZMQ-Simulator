@@ -2,7 +2,7 @@
 	"apps": [
 		{
 			"name": "zmq-consumer",
-			"script": "src/index.js",
+			"script": "consumer/src/index.js",
 			"instances": 1,
 			"autorestart": true,
 			"watch": false,
@@ -13,4 +13,3 @@
 		}
 	]
 }
-

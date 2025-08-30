@@ -29,13 +29,16 @@
 				<div class="arg green">
 					<strong>Channel</strong> <br />
                     <%= config.zmq_channel %>
-                    
+                    <!-- TODO Faire un fetch async sur /zmq pour refresh -->
 				</div>
 			</div>
 			<div id="reload">
 				<button><a href=".">Reload</a></button>
 			</div>
 
+            <div id="number_messages">
+                Messages number: <%= messages.length %>
+            </div>
 			<div id="messages">
                 <ul>
 					<% messages.forEach(function(message, i){ %>
