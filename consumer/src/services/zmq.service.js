@@ -2,17 +2,17 @@ const ZMQClient = require('../models/ZMQClient');
 const { sleep } = require('../utils');
 
 class ZMQService {
-	constructor(port, channel) {
-		this.client = new ZMQClient(port);
+	constructor(host, port, channel) {
+		this.client = new ZMQClient(host, port);
 		this.activateNotification(channel);
 	}
 
 	// Singleton method
 	static service = null;
-	static getService(port, channel) {
+	static getService(host, port, channel) {
 		if (ZMQService.service !== null) return ZMQService.service;
 
-		ZMQService.service = new ZMQService(port, channel);
+		ZMQService.service = new ZMQService(host, port, channel);
 		return ZMQService.service;
 	}
 

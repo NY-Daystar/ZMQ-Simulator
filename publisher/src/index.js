@@ -12,19 +12,23 @@ function main() {
 
 	// Set ZMQ
 	if (config.with_consume)
-		createZmqSubscribe(config.zmq_port, config.zmq_channel).then(async (sock) => {
+		createZmqSubscribe(config.zmq_host, config.zmq_port, config.zmq_channel).then(async (sock) => {
 			for await (const [canal, msg] of sock) {
 				log(`Receive on canal ${canal.toString()} : ${msg.toString()}`.green);
 			}
 		});
 
-	createZmqPublisher(config.zmq_port).then(async (sock) => {
-		await sleep(1000);
-		let index = 0;
-		while (true) {
-			await sendMessage(sock, config.zmq_channel, config.frequency, ++index);
-		}
-	});
+	createZmqPublisher(config.zmq_port)
+		.then(async (sock) => {
+			await sleep(1000);
+			let index = 0;
+			while (true) {
+				await sendMessage(sock, config.zmq_channel, config.frequency, ++index);
+			}
+		})
+		.catch((e) => {
+			console.error('Error creating publisher', e);
+		});
 }
 
 /*
@@ -33,9 +37,9 @@ function main() {
  */
 async function createZmqPublisher(port) {
 	const sock = new zmq.Publisher();
-	await sock.bind(`tcp://127.0.0.1:${port}`);
+	await sock.bind(`tcp://*:${port}`);
 
-	log(colors.yellow(`Publisher bound to port ${port}`));
+	log(`Publisher bound to every host (tcp://*) to port ${port.toString().yellow}`);
 	return sock;
 }
 
@@ -43,12 +47,12 @@ async function createZmqPublisher(port) {
  * Subscribe to ZMQ queue to log message
  * param {port} : port socket to subscribe
  */
-async function createZmqSubscribe(port, channel) {
+async function createZmqSubscribe(host, port, channel) {
 	const sock = new zmq.Subscriber();
-	sock.connect(`tcp://127.0.0.1:${port}`);
-	await sock.subscribe(channel);
+	sock.connect(`tcp://${host}:${port}`);
+	sock.subscribe(channel);
 
-	log(colors.yellow(`Subscriber connected to port ${port}`));
+	log(`Subscriber connected to host ${host.yellow} and port ${port.toString().yellow} channel: ${channel.yellow}`);
 	return sock;
 }
 

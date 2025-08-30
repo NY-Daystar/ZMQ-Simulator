@@ -3,8 +3,8 @@ const ApiError = require('../utils/ApiError');
 const { ZMQService } = require('../services');
 
 class ZMQController {
-	constructor(port, channel) {
-		this.service = ZMQService.getService(port, channel);
+	constructor(host, port, channel) {
+		this.service = ZMQService.getService(host, port, channel);
 	}
 
 	getZmqMessages = async (_, res) => {

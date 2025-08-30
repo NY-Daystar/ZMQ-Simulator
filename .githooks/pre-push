@@ -33,6 +33,11 @@ function main() {
     coverage
     log_color "Executing coverage tests DONE..." "yellow"
 
+    log_color "Executing docker_build" "yellow"
+    docker_build
+    check 'docker_build' $?
+    log_color "Executing docker_build DONE..." "yellow"
+
     log_color "Executing check sca" "magenta"
     check_sca
     check 'check_sca' $?
@@ -68,6 +73,9 @@ function check() {
     'check_sca')
         [ $result_code != 0 ] && log_color "No package to launch analysis" "red" && log Execute: $(log_color  "npm i -g npm-audit-html@beta" "yellow") && log_color "Cancel git push" "red" && exit 1
         ;;
+    'docker_build')
+        [ $result_code != 0 ] && log_color "Docker images building failed" "red" && log_color "Cancel git push" "red" && exit 1
+        ;;
     esac
 }
 
@@ -95,6 +103,12 @@ function check_sca(){
     which npm-audit-html > /dev/null 2>/dev/null
     return $?
 }
+
+function docker_build() {
+    npm run docker:build
+    return $?
+}
+
 
 function sca() {
     packages=$(find . -name 'node_modules' -prune -o -name 'package.json' -print)

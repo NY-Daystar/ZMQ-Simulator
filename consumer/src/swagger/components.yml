@@ -1,17 +1,24 @@
 components:
     schemas:
-        ZmqClient:
+        Zmq:
             type: object
             properties:
-                port:
-                    type: number
-                messages:
-                    type: array
+                guid:
+                    type: string
                     format: number
+                type:
+                    type: string
+                data:
+                    type: string
+                    format: json
+                timeSent:
+                    type: string
+                    format: date
             example:
-                port: 53425
-                messages: ['m1', 'm2', 'm3']
-
+                guid: '2369979e4bfbf8'
+                type: 'global'
+                data: '{"index":1,"type":"global","id":"9759","name":"simulator"}'
+                timeSent: 'Saturday, August 30, 2025 11:58 PM'
         Error:
             type: object
             properties:
@@ -19,17 +26,16 @@ components:
                     type: number
                 message:
                     type: string
-
     responses:
-        DuplicateEmail:
-            description: Email already taken
+        NoContent:
+            description: No Content
             content:
                 application/json:
                     schema:
                         $ref: '#/components/schemas/Error'
                     example:
-                        code: 400
-                        message: Email already taken
+                        code: 204
+                        message: No Content
         Unauthorized:
             description: Unauthorized
             content:
@@ -57,3 +63,12 @@ components:
                     example:
                         code: 404
                         message: Not found
+        Internal:
+            description: Internal Server Error
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/Error'
+                    example:
+                        code: 500
+                        message: Internal Server Error

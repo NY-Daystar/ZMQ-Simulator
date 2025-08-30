@@ -1,6 +1,6 @@
 {
 	"name": "zmq-simulator",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"description": "Node js application to publish message with ZeroMQ protocol",
 	"repository": "https://github.com/NY-Daystar/ZMQ-Simulator",
 	"author": "Lucas Noga <luc4snoga@gmail.com>",
@@ -10,9 +10,8 @@
 	},
 	"main": "publisher/src/index.js",
 	"scripts": {
-		"start": "npm run start:publisher",
 		"start:publisher": "pm2 start publisher/ecosystem.config.json --no-daemon",
-		"start:consumer": "pm2 start publisher/ecosystem.config.json --no-daemon",
+		"start:consumer": "pm2 start consumer/ecosystem.config.json --no-daemon",
 		"dev": "npm run dev:publisher && npm run dev:consumer",
 		"dev:publisher": "cross-env NODE_ENV=development nodemon publisher/src/index.js",
 		"dev:consumer": "cross-env NODE_ENV=development nodemon consumer/src/index.js",
@@ -22,7 +21,8 @@
 		"lint:fix": "eslint . --fix",
 		"prettier": "prettier --check **/*.js",
 		"prettier:fix": "prettier --write **/*.js",
-		"docker:prod": "docker-compose -f docker-compose.yml -f docker-compose.prod.yml up"
+		"docker:build": "docker-compose build",
+		"docker": "docker-compose -p zmq-simulator up"
 	},
 	"dependencies": {
 		"colors": "^1.0.0",

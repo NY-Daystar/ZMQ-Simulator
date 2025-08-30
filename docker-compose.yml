@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+    publisher:
+        build: .
+        command: npm run start:publisher
+        networks:
+            - node-network
+        environment:
+            - NODE_ENV=production
+            - APP_PORT=3000
+            - ZMQ_PORT=49152
+            - ZMQ_CHANNEL=zmq-simulator
+    consumer:
+        build: .
+        command: npm run start:consumer
+        ports:
+            - '3000:3000'
+        depends_on:
+            - publisher
+        networks:
+            - node-network
+        environment:
+            - NODE_ENV=production
+            - APP_PORT=3000
+            - ZMQ_HOST=publisher
+            - ZMQ_PORT=49152
+            - ZMQ_CHANNEL=zmq-simulator
+
+networks:
+    node-network:
+        driver: bridge
