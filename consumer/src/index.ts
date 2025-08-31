@@ -1,5 +1,5 @@
-const config = require('./config');
-const app = require('./app');
+import config from './config';
+import app from './app';
 
 console.info(`Environment: ${config.env}`);
 

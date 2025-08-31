@@ -1,8 +1,8 @@
 # ZMQ-simulator
 
-**_Version: v1.1.0_**
+**_Version: v1.2.0_**
 
-[![ci](https://github.com/NY-Daystar/zmq-simulator/actions/workflows/js.yml/badge.svg?branch=main)](https://github.com/NY-Daystar/zmq-simulator/actions)
+[![ZMQ Simulator CI](https://github.com/NY-Daystar/ZMQ-Simulator/actions/workflows/js.yml/badge.svg?branch=main)](https://github.com/NY-Daystar/ZMQ-Simulator/actions)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Version](https://img.shields.io/github/tag/Ny-daystar/zmq-simulator.svg)](https://github.com/NY-Daystar/zmq-simulator/releases)
 [![Total views](https://img.shields.io/sourcegraph/rrc/github.com/NY-Daystar/zmq-simulator.svg)](https://sourcegraph.com/github.com/NY-Daystar/zmq-simulator)
@@ -79,11 +79,13 @@ This file look like this, you can change any values
 
 ```bash
 APP_PORT=3000                   # port to get access to application gui in browswer (http://localhost:3000)
-ZMQ_HOST=localhost             # host for zmq to send and receive messages (default: localhost)
+ZMQ_HOST=localhost              # host for zmq to send and receive messages (default: localhost)
 ZMQ_PORT=49152                  # port for zmq to send and receive messages (default: 49152)
 ZMQ_CHANNEL=zmq-channel         # name of the channel to send and receive message (default: zmq-channel)
 FREQUENCY=1                     # seconds between message (default: 1second)
 PUBLISHER_ALSO_CONSUME=false    # if you want the publisher program also receive the message itself (default: false)
+DATA_FILE_PATH=data.json        # if you want to send specific data use this file otherwise
+                                    # you can delete it and it will generate random data
 ```
 
 5. Launch application in first terminal
@@ -104,7 +106,8 @@ npm run start:consumer
 npm run docker
 ```
 
-TODO expliquer le fichier de data
+You can go now into http://localhost:3000/  
+Swagger documentation in http://localhost:3000/v1/docs/
 
 ## Commands list
 
